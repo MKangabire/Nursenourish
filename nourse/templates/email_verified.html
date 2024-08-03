@@ -1,0 +1,14 @@
+{% extends "main.html" %}
+
+{% block title %}Email Verified{% endblock %}
+
+{% block content %}
+    
+    <main>
+        <div class="content">
+            <h2>Account Verified</h2>
+            <p>Your email address has been successfully verified. You can now <a href="{% url 'nourse:login' %}">log in</a> to your account.</p>
+            <p>If you need any further assistance, please <a href="{% url 'nourse:contact' %}">contact us</a>.</p>
+        </div>
+    </main>
+{% endblock %}

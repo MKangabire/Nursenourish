@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<style>
+    .search-results-container {
+        margin: 20px auto;
+        max-width: 800px;
+        font-family: Arial, sans-serif;
+    }
+
+    .search-results-container h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .search-results-container h3 {
+        font-size: 20px;
+        margin: 20px 0;
+        color: #555;
+    }
+
+    .search-results-container h4 {
+        font-size: 18px;
+        margin: 10px 0;
+        color: #777;
+    }
+
+    .search-results-container ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .search-results-container li {
+        margin: 10px 0;
+        padding: 10px;
+        background-color: #60b2f5;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .search-results-container a {
+        text-decoration: none;
+        color: #1a0dab;
+        font-weight: bold;
+    }
+
+    .search-results-container p {
+        margin: 5px 0 0;
+        color: #666;
+    }
+
+    .no-results {
+        font-size: 16px;
+        color: #999;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="search-results-container">
+    <h2>Search Results for "{{ query }}"</h2>
+
+    {% if posts and users %}
+        <h3>Results for "{{ query }}" </h3>
+    {% elif posts %}
+        <h3>Results for "{{ query }}" in Posts</h3>
+    {% elif users %}
+        <h3>Results for "{{ query }}" in Users</h3>
+    {% else %}
+        <h3>No results found for "{{ query }}"</h3>
+    {% endif %}
+
+    {% if posts %}
+        <h4>Posts by {{ query }}</h4>
+        <ul>
+            {% for post in posts %}
+                <li>
+                    <a href="{% url 'nourse:post_detail' post.id %}">{{ post.title }}</a>
+                    <p>{{ post.content|slice:":100" }}...</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="no-results">No posts found.</p>
+    {% endif %}
+
+    {% if users %}
+        <h4>Users</h4>
+        <ul>
+            {% for user in users %}
+                <li>
+                    <a href="{% url 'nourse:profile' user.id %}">{{ user.username }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="no-results">No profiles found.</p>
+    {% endif %}
+</div>
+{% endblock %}

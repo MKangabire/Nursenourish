@@ -1,0 +1,13 @@
+{% extends "main.html" %}
+{% block title %}Email Verification Sent{% endblock %}
+{% block content %}
+        <main>
+        <div class="content">
+            <h2>Verification Email Sent</h2>
+            <p>Thank you for registering! A verification email has been sent to your email address.</p>
+            <p>Please check your inbox and follow the instructions in the email to verify your account.</p>
+            <p>If you don't see the email, please check your spam or junk folder. You can also <a href="{% url 'nourse:resend_verification_email' %}">request a new verification email</a>.</p>
+        </div>
+    </main>
+{% endblock %}    
+</html>

@@ -1,0 +1,14 @@
+{% extends 'main.html' %}
+
+{% block title %}Confirm Deletion{% endblock %}
+
+{% block content %}
+<h2>Confirm Deletion</h2>
+<p>Are you sure you want to delete the post "{{ post.title }}"?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, delete it</button>
+    <a href="{% url 'nourse:profile' %}">Cancel</a>
+</form>
+{% endblock %}

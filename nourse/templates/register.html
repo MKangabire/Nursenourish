@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'register.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <title>Registration</title>
+</head>
+<body>
+    <div class="background-image"></div>
+    <div class="container">
+        <form method="POST" class="form" action="{% url 'nourse:register' %}">
+            {% csrf_token %}
+            <img class="logo" src="{% static 'images/logo (2).png' %}" alt="NURSE NOURISH">
+            <h2>Create Account</h2>
+            <div class="form-fields">
+                {{ form.as_p }}
+            </div>
+            <button type="submit">Sign Up</button>
+            <p>Already have an account? <a href="{% url 'nourse:login' %}">Login here</a></p>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,129 @@
+{% extends 'main.html' %}
+{% block content %}
+<main class="container">
+    <h1 class="text-center mb-4">Welcome, {{ user.username }}</h1>
+    <form method="post" enctype="multipart/form-data" action="{% url 'nourse:complete' %}" class="profile-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="picture">Profile Picture</label>
+            <div class="profile-picture-container">
+                {% if user.profile.profile_picture %}
+                    <img src="{{ user.picture.url }}" alt="Profile Picture" class="profile-pic">
+                {% else %}
+                    <div class="profile-pic-placeholder">
+                        <i class="fas fa-user"></i>
+                    </div>
+                {% endif %}
+                <input type="file" name="picture" id="picture" accept="image/*" class="profile-pic-input">
+                <label for="picture" class="profile-pic-label">Choose Photo</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" name="title" id="title" value="{{ user.profile.title }}" placeholder="Enter your title">
+        </div>
+        <div class="form-group">
+            <label for="work_field">Work Field</label>
+            <input type="text" name="work_field" id="work_field" value="{{ user.profile.work_field }}" placeholder="Enter your work field">
+        </div>
+        <div class="form-group">
+            <label for="bio">Bio</label>
+            <textarea name="bio" id="bio" rows="5" placeholder="Tell us about yourself" value="{{ user.profile.bio }}" placeholder="Tell us more about yourself ..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Profile</button>
+    </form>
+</main>
+
+<style> 
+    h1 {
+        display: block;
+    }
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .profile-form {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+    }
+    .form-group {
+        margin-bottom: 25px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+    }
+    .form-group input[type="text"],
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+    }
+    .form-group input[type="text"]:focus,
+    .form-group textarea:focus {
+        border-color: #4163aa;
+        outline: none;
+    }
+    .profile-picture-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .profile-pic,
+    .profile-pic-placeholder {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin-bottom: 15px;
+        object-fit: cover;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 48px;
+        color: #aaa;
+    }
+    .profile-pic-input {
+        display: none;
+    }
+    .profile-pic-label {
+        background-color: #4163aa;
+        color: #fff;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .profile-pic-label:hover {
+        background-color: #3a5893;
+    }
+    textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+    .btn-primary {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background-color: #4163aa;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+    .btn-primary:hover {
+        background-color: #3a5893;
+    }
+</style>
+{% endblock %}

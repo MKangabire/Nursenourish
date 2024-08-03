@@ -1,0 +1,528 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbox - Nurse Nourish</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4163aa;
+            --secondary-color: #8ff0d3;
+            --background-color: #b3d1f0;
+            --text-color: #333;
+            --border-color: #ddd;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        .background-image {  
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: url('/static/images/download\ \(1\).jfif');
+          background-size: cover;
+          background-position: center;
+          background-attachment: fixed;
+          filter: blur(4px);
+          z-index: -1;
+          opacity: 0.8;
+      }
+        header {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 10px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            width: 50px;
+            height: auto;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+        }
+
+        nav ul li a, nav ul li button {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        nav ul li a i, nav ul li button i {
+            margin-right: 5px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar input {
+            padding: 8px;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+
+        .search-bar button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .user-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .content {
+            margin-top: 80px; /* Adjust based on header height */
+            padding: 20px;
+        }
+        .new-conversation {
+  padding: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.new-conversation h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+#search-user-form {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+#search-username {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px 0 0 4px;
+}
+
+#search-user-form button {
+  padding: 8px 12px;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+#search-results {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.search-result-item img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.search-result-item .user-info {
+  flex: 1;
+}
+
+.search-result-item .start-chat-btn {
+  padding: 5px 10px;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.user-pic-small {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.message-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.3s;
+}
+
+.message-info {
+  flex: 1;
+}
+
+        .inbox-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .inbox-container {
+          display: flex;
+          max-width: 1200px;
+          margin: 80px auto 0;
+          height: calc(100vh - 80px);
+          background-color: #fff;
+          box-shadow: 0 0 10px rgba(0,0,0,0.1);
+          border-radius: 8px;
+          overflow: hidden;
+        }
+
+        .inbox-sidebar {
+          width: 300px;
+          background-color: #f8f9fa;
+          border-right: 1px solid var(--border-color);
+          display: flex;
+          flex-direction: column;
+        }
+
+        
+        .message-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          overflow-y: auto;
+        }
+
+        .message-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 15px;
+          border-bottom: 1px solid var(--border-color);
+          transition: background-color 0.3s;
+        }
+
+        .message-item:hover {
+          background-color: #f1f3f5;
+        }
+
+        .message-item.unread {
+          background-color: #e9ecef;
+        }
+
+        .message-info h3 {
+          margin: 0;
+          font-size: 16px;
+          color: var(--text-color);
+        }
+
+        .message-info p {
+          margin: 5px 0 0;
+          color: #6c757d;
+          font-size: 14px;
+        }
+
+        .view-button {
+          text-decoration: none;
+          color: var(--primary-color);
+          font-weight: bold;
+          font-size: 14px;
+        }
+
+        .inbox-chat {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
+
+        
+
+        .chat-messages {
+          flex: 1;
+          padding: 20px;
+          overflow-y: auto;
+          background-color: #f8f9fa;
+        }
+
+        .message {
+          max-width: 70%;
+          padding: 10px 15px;
+          margin-bottom: 15px;
+          border-radius: 18px;
+          line-height: 1.4;
+          position: relative;
+        }
+
+        .message.sent {
+          background-color: var(--primary-color);
+          color: #fff;
+          margin-left: auto;
+          border-bottom-right-radius: 4px;
+        }
+
+        .message.received {
+          background-color: #e9ecef;
+          border-bottom-left-radius: 4px;
+        }
+
+        .message-date {
+          font-size: 12px;
+          color: #adb5bd;
+          display: block;
+          margin-top: 5px;
+        }
+
+        .no-messages {
+          text-align: center;
+          color: #6c757d;
+          padding: 20px;
+        }
+
+        .chat-footer {
+          padding: 15px;
+          background-color: #fff;
+          border-top: 1px solid var(--border-color);
+        }
+
+        .chat-footer form {
+          display: flex;
+          align-items: center;
+        }
+
+        .chat-footer input {
+          flex: 1;
+          padding: 10px;
+          border: 1px solid var(--border-color);
+          border-radius: 20px;
+          outline: none;
+        }
+
+        .chat-footer button {
+          margin-left: 10px;
+          padding: 10px 15px;
+          border: none;
+          border-radius: 50%;
+          background-color: var(--primary-color);
+          color: #fff;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
+
+        .chat-footer button:hover {
+          background-color: #34518c;
+        }
+
+        @media (max-width: 768px) {
+          .inbox-container {
+            flex-direction: column;
+          }
+
+          .inbox-sidebar {
+            width: 100%;
+            max-height: 300px;
+          }
+
+          .message {
+            max-width: 85%;
+          }
+        }
+
+    </style>
+</head>
+<body>
+  <div class="background-image"></div>
+    <header>
+        <img class="logo" src="{% static 'images/logo (2).ico' %}" alt="Nurse Nourish Logo">
+        <nav>
+            <ul>
+                <li><a href="{% url 'nourse:home' %}"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="{% url 'nourse:contact' %}"><i class="fas fa-envelope"></i> Contact Us</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'nourse:profile' %}"><i class="fas fa-user"></i> My Profile</a></li>
+                    <li><a href="{% url 'nourse:inbox' %}"><i class="fas fa-envelope"></i> Inbox</a></li>
+                    <li>
+                        <form id="logout-form" action="{% url 'nourse:logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                    <li>
+                        <img class="user-pic" src="{{ user.picture.url}}" alt="Profile Picture">
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'nourse:register' %}"><i class="fas fa-user-plus"></i> Register</a></li>
+                    <li><a href="{% url 'nourse:login' %}"><i class="fas fa-sign-in-alt"></i> Log In</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        <div class="search-bar">
+            <form method="get" action="{% url 'nourse:search' %}">
+                <input type="text" placeholder="Search..." name="q">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+    </header>
+
+    <div class="inbox-container">
+      <div class="inbox-sidebar">
+        <div class="new-conversation">
+          <h3>New Conversation</h3>
+          <form id="search-user-form">
+            <input type="text" id="search-username" placeholder="Search username" required>
+            <button type="submit"><i class="fas fa-search"></i></button>
+          </form>
+          <div id="search-results"></div>
+        </div>
+        <ul class="message-list">
+          {% for message in received_messages %}
+          <li class="message-item {% if not message.is_read %}unread{% endif %}">
+            <img src="{{ message.sender.picture.url }}" alt="{{ message.sender.username }}" class="user-pic-small">
+            <div class="message-info">
+              <h3>{{ message.sender.username }}</h3>
+              <p>{{ message.content|slice:":50" }}{% if message.content|length > 50 %}...{% endif %}</p>
+            </div>
+            <a href="{% url 'nourse:inbox_with_recipient' recipient_id=message.sender.id %}" class="view-button">View</a>
+          </li>
+          {% empty %}
+            <li class="message-item no-messages">No messages.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    
+      <div class="inbox-chat">
+        
+        <div class="chat-messages" id="chat-messages">
+          {% for message in chat_messages %}
+            <div class="message {% if message.sender == user %}sent{% else %}received{% endif %}">
+              <img src="{{ message.sender.picture.url }}" alt="{{ message.sender.username }}" class="user-pic-small">
+              <div class="message-content">
+                <p>{{ message.content }}</p>
+                <small class="message-date">{{ message.date_sent|date:"M d, Y H:i" }}</small>
+              </div>
+            </div>
+          {% empty %}
+            <div class="no-messages">No messages yet.</div>
+          {% endfor %}
+        </div>
+        <footer class="chat-footer">
+          <form id="message-form" method="POST" action="{% url 'nourse:send_message' %}">
+            {% csrf_token %}
+            <input type="hidden" name="recipient_id" value="{{ recipient.id }}">
+            <input type="text" name="content" placeholder="Type a message..." required>
+            <button type="submit"><i class="fas fa-paper-plane"></i></button>
+          </form>
+        </footer>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const searchForm = document.getElementById('search-user-form');
+        const searchInput = document.getElementById('search-username');
+        const searchResults = document.getElementById('search-results');
+      
+        searchForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const username = searchInput.value.trim();
+          if (username) {
+            searchUser(username);
+          }
+        });
+      
+        function searchUser(username) {
+          // Replace this URL with your actual search endpoint
+          fetch(`/search-users/?username=${encodeURIComponent(username)}`)
+            .then(response => response.json())
+            .then(data => {
+              displaySearchResults(data);
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+        }
+      
+        function displaySearchResults(users) {
+          searchResults.innerHTML = '';
+          if (users.length === 0) {
+            searchResults.innerHTML = '<p>No users found.</p>';
+            return;
+          }
+      
+          users.forEach(user => {
+            const resultItem = document.createElement('div');
+            resultItem.className = 'search-result-item';
+            resultItem.innerHTML = `
+              <img src="${user.picture_url}" alt="${user.username}">
+              <div class="user-info">
+                <h4>${user.username}</h4>
+                <p>${user.full_name}</p>
+              </div>
+              <button class="start-chat-btn" data-user-id="${user.id}">Chat</button>
+            `;
+            searchResults.appendChild(resultItem);
+          });
+      
+          // Add event listeners to chat buttons
+          const chatButtons = searchResults.querySelectorAll('.start-chat-btn');
+          chatButtons.forEach(button => {
+            button.addEventListener('click', function() {
+              const userId = this.getAttribute('data-user-id');
+              startChat(userId);
+            });
+          });
+        }
+      
+        function startChat(userId) {
+          // Redirect to the chat with the selected user
+          window.location.href = `/inbox/${userId}/`;
+        }
+      });
+    </script>
+
+</body>
+</html>

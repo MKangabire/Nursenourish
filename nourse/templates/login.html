@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+    <title>Login</title>
+</head>
+<body>
+    <div class="background-image"></div>
+    <div class="form">
+        <form method="post" action="{% url 'nourse:login' %}">
+            <img class="logo" src="{% static 'images/logo (2).png' %}" alt="NURSE NOURISH">
+            <h1 class="heading">Login</h1>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="remember-forgot">
+                <a href="change-password.html" class="fp">Forgot Password?</a>
+                <p>New here? <a href="{% url 'nourse:register' %}">Register</a></p>
+            </div>
+            <button class="submit-btn" type="submit">Log in</button>
+        </form>
+    </div>
+</body>
+</html>

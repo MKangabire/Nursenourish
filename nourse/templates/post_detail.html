@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="post-detail">
+    <h2>{{ post.title }}</h2>
+    {% if post.image %}
+        <img src="{{ media_url }}{{ post_image }}" alt="Post Image">
+    {% endif %}
+    <p>{{ post.content }}</p>
+    <p>Category: {{ post.category.name }}</p>
+    <p>Posted by: {{ post.user.username }} on {{ post.date_posted }}</p>
+    <div class="like-section">
+        <a href="{% url 'nourse:like_post' post.id %}" class="like-button">
+            <i class="fas fa-thumbs-up"></i> Like
+        </a> ({{ post.likes.count }})
+    </div>
+
+    <div class="comments-toggle">
+        <i class="fas fa-comments"></i> Comments
+    </div>
+
+    <div class="comments-box">
+        <h3>Comments</h3>
+        {% for comment in post.comments.all %}
+            <div class="comment">
+                <p>{{ comment.content }}</p>
+                <p>{{ comment.user.username }} <br> {{ comment.date_posted }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.querySelector('.comments-toggle');
+    const commentsBox = document.querySelector('.comments-box');
+    
+    toggleIcon.addEventListener('click', function() {
+        console.log('Comments toggle clicked');
+        if (commentsBox.style.display === 'none' || commentsBox.style.display === '') {
+            commentsBox.style.display = 'block';
+        } else {
+            commentsBox.style.display = 'none';
+        }
+    });
+});
+
+</script>
+{% endblock %}
+<style>
+    .comments-box {
+    display: none; /* Initially hidden */
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #f9f9f9;
+}
+
+.comments-toggle {
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.comments-toggle .fa-comments {
+    margin-right: 5px;
+}
+
+</style>

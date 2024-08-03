@@ -1,0 +1,89 @@
+{% extends "main.html" %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>Edit Profile</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="work_field">Work Field</label>
+      <input type="text" id="title" name="Title" value="{{ user.profile.title }}">
+    </div>
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" value="{{ user.username }}" readonly>
+    </div>
+    <div class="form-group">
+      <label for="first_name">First Name</label>
+      <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}">
+    </div>
+    <div class="form-group">
+      <label for="last_name">Last Name</label>
+      <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}">
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" value="{{ user.email }}">
+    </div>
+    <div class="form-group">
+      <label for="bio">Bio</label>
+      <textarea id="bio" name="bio">{{ user.profile.bio }}</textarea>
+    </div>
+    <div class="form-group">
+      <label for="work_field">Work Field</label>
+      <input type="text" id="work_field" name="work_field" value="{{ user.profile.work_field }}">
+    </div>
+    <div class="form-group">
+      <label for="picture">Profile Picture</label>
+      {% if profile.picture %}
+          <img src="{{ user.picture.url }}" alt="Current Profile Picture" class="current-profile-pic">
+      {% endif %}
+      <input type="file" id="picture" name="picture" accept="image/*">
+  </div>
+    <button type="submit" class="submit-btn">Save Changes</button>
+  </form>
+  <a href="{% url 'nourse:profile' %}">Back to Profile</a>
+</div>
+
+<style>
+  input,
+  textarea,
+  option {
+    width: 80%;
+    height: 35px;
+    display: block;
+    margin: 20px auto;
+    background: rgba(255, 255, 250, 0.3);
+    border: none;
+    color: #0b0b0c;
+    padding: 15px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    transition: .5s;
+  }
+  option {
+    width: 100px;
+    height: 30px;
+  }
+  label {
+    font-weight: bold;
+  }
+  button {
+    width: 80px;
+    height: auto;
+    background-color: rgb(68, 158, 68);
+  }
+  button:hover {
+    background-color: #22491e00;
+  }
+  .current-profile-pic {
+    max-width: 100px;
+    max-height: 100px;
+    margin-bottom: 10px;
+  }
+  input[type="file"] {
+    padding: 10px 0;
+  }
+</style>
+{% endblock %}

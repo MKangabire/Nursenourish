@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Nurse Nourish{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="background-image"></div>
+    <header>
+        <img class="logo" src="{% static 'images/logo (2).ico' %}" alt="Nurse Nourish Logo">
+        <nav>
+            <ul>
+                <li>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'nourse:home' %}"><i class="fas fa-home"></i>Home</a>
+                    {% else %}
+                        <a href="{% url 'nourse:login' %}"><i class="fas fa-home"></i>Home</a>
+                    {% endif %}
+                </li>
+                {% if user.is_authenticated %}
+                
+                    <li><a href="{% url 'nourse:inbox' %}"><i class="fas fa-envelope"></i> Inbox</a></li>
+                    <li>
+                        <form id="logout-form" action="{% url 'nourse:logout' %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" style="border: none; background: none; padding: 0; cursor: pointer;">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                    <li>
+                        <a href="{% url 'nourse:profile' %}">
+                            <img class="user-pic" src="{{ user.picture.url }}" alt="Profile Picture">
+                        </a>
+                    </li>
+                    
+                {% else %}
+                    <li><a href="{% url 'nourse:register' %}"><i class="fas fa-user-plus"></i> Register</a></li>
+                    <li><a href="{% url 'nourse:login' %}"><i class="fas fa-sign-in-alt"></i> Log In</a></li>
+                {% endif %}
+                    
+            </ul>
+        </nav>
+
+        <div class="search-bar">
+            <form method="get" action="{% url 'nourse:search' %}">
+                <input type="text" placeholder="Search..." name="q">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </header>
+
+    <main>
+        <aside class="sidebar">
+            <h3>Filter</h3>
+            <ul>
+                {% for category in categories %}
+                    <li>
+                        <a href="{% url 'nourse:posts_by_category' category.id %}">{{ category.name }}</a>
+                    </li>
+                {% empty %}
+                    <li>No categories available.</li>
+                {% endfor %}
+            </ul>
+        </aside>
+        {% block content %}
+        <div class="post-list">
+            {% for post in posts %}
+            <div class="post">
+                <h3>{{ post.title }}</h3>
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="Post Image" class="post-image">
+                {% endif %}
+                <p>{{ post.content }}</p>
+                <small>Posted by {{ post.user.username }} on {{ post.date_posted }}</small>
+                <div class="post-actions">
+                    <a href="{% url 'nourse:like_post' post.id %}">
+                        {% if user.is_authenticated and user in post.likes.all %}
+                            <i class="fas fa-thumbs-down"></i> Unlike
+                        {% else %}
+                            <i class="fas fa-thumbs-up"></i> Like
+                        {% endif %}
+                    </a>
+                    <span>{{ post.total_likes }} likes</span>
+                    <button class="comment-toggle" data-post-id="{{ post.id }}">
+                        <i class="fas fa-comments"></i> Comments
+                    </button>
+
+                    <div class="comment-section" id="comments-{{ post.id }}" style="display: none;">
+                        <!-- Comments will be loaded here -->
+                        {% for comment in post.comments.all %}
+                            <div class="comment">
+                                <p><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</p>
+                            </div>
+                        {% empty %}
+                            <p>No comments yet.</p>
+                        {% endfor %}
+                        
+                        <!-- Comment form -->
+                        <form method="POST" action="{% url 'nourse:add_comment' post.id %}">
+                            {% csrf_token %}
+                            <textarea name="content" placeholder="Add a comment..." required></textarea>
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+                <p>No posts available.</p>
+            {% endfor %}
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.comment-toggle').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const postId = this.getAttribute('data-post-id');
+                        const commentSection = document.getElementById(`comments-${postId}`);
+                        
+                        if (commentSection.style.display === 'none') {
+                            commentSection.style.display = 'block';
+                            this.innerHTML = '<i class="fas fa-comments"></i> Hide Comments';
+                        } else {
+                            commentSection.style.display = 'none';
+                            this.innerHTML = '<i class="fas fa-comments"></i> Comments';
+                        }
+                    });
+                });
+            });
+        </script>
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Nurse Nourish. All rights reserved.</p>
+    </footer>
+</body>
+</html>
