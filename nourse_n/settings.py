@@ -18,7 +18,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-#xjb$az)(3rt4ynbs)i-#tc=^-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS = ['nursenourish.me', 'www.nursenourish.me', 'nursenourish1.com', 'www.nursenourish1.com']
+ALLOWED_HOSTS = ['nursenourish.vercel.app', 'nursenourish1.com', 'www.nursenourish1.com', '127.0.0.1']
 
 
 # Application definition
